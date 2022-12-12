@@ -1,0 +1,850 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>DOM Effects</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="e1fe1905-fbd0-4990-81f5-8c44f6d48f43" class="page sans"><header><img class="page-cover-image" src="https://www.notion.so/images/page-cover/met_william_morris_1878.jpg" style="object-position:center 0%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">💻</span></div><h1 class="page-title">DOM Effects</h1></header><div class="page-body"><p id="a34b97c1-2e22-4dcc-b0af-6f51dec056c9" class="">
+</p><p id="b1642930-e374-411e-a43a-2c27444f0e53" class="">There are a number of PureScript packages for working directly with the DOM, or with open-source DOM libraries. For example:</p><ul id="22e412b6-acc7-40cf-b0b4-bc9acd7a1721" class="bulleted-list"><li style="list-style-type:disc"><a href="https://github.com/purescript-web/purescript-web-dom"><code>web-dom</code></a> provides type definitions and low level interface implementations for the W3C DOM spec.</li></ul><ul id="c25e3872-bc4f-4c38-b0e8-7e9e401e3685" class="bulleted-list"><li style="list-style-type:disc"><a href="https://github.com/purescript-web/purescript-web-html"><code>web-html</code></a> provides type definitions and low level interface implementations for the W3C HTML5 spec.</li></ul><ul id="086b84e2-c015-4f17-b610-2ff253786d7f" class="bulleted-list"><li style="list-style-type:disc"><a href="https://github.com/paf31/purescript-jquery"><code>jquery</code></a> is a set of bindings to the <a href="http://jquery.org/">jQuery</a> library.</li></ul><p id="c0def2c4-2b8a-4281-b88a-a0d04bb94435" class="">There are also PureScript libraries which build abstractions on top of these libraries, such as</p><ul id="525ddf3c-455e-4ead-b473-dc905884a550" class="bulleted-list"><li style="list-style-type:disc"><a href="https://github.com/paf31/purescript-thermite"><code>thermite</code></a>, which builds on <a href="https://github.com/purescript-contrib/purescript-react"><code>react</code></a></li></ul><ul id="ec4c5583-ba99-4dc6-b69c-aa08bfe896da" class="bulleted-list"><li style="list-style-type:disc"><a href="https://github.com/megamaddu/purescript-react-basic-hooks"><code>react-basic-hooks</code></a>, which builds on <a href="https://github.com/lumihq/purescript-react-basic"><code>react-basic</code></a></li></ul><ul id="bdccb7aa-a685-418f-b4e5-ad9c6071794f" class="bulleted-list"><li style="list-style-type:disc"><a href="https://github.com/purescript-halogen/purescript-halogen"><code>halogen</code></a> which provides a type-safe set of abstractions on top of a custom virtual DOM library.</li></ul><p id="9675b863-eb0e-451b-aaec-dda5ab46eec9" class="">We will use the <code>react-basic-hooks</code> library to add a user interface to our address book application, but the interested reader is encouraged to explore alternative approaches.</p><p id="22bb7e23-f69f-49cd-9d89-4176510e5ad5" class="">
+</p><h2 id="0bcdff48-a6b7-4343-89c9-cab113d5ee62" class="">React-basic-hooks</h2><p id="70c87334-29ca-4234-8b66-5fb26ac3c2d4" class="">Using the <code>react-basic-hooks</code> library, we will define our application as a React <em>component</em>. React components describe HTML elements in code as pure data structures, which are then efficiently rendered to the DOM. In addition, components can respond to events like button clicks. The <code>react-basic-hooks</code> library uses the <code>Effect</code> monad to describe how to handle these events.</p><p id="2889711a-2690-4c64-9376-bde622865b3a" class="">
+</p><p id="c68eab7c-f98c-420b-a31b-0249a059d6e7" class="">The <code>src/index.html</code> file is minimal:</p><pre id="522e7fd9-c7ab-4b6c-8e70-784005d066bc" class="code code-wrap"><code>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Address Book&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css&quot; crossorigin=&quot;anonymous&quot;&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=&quot;container&quot;&gt;&lt;/div&gt;
+    &lt;script type=&quot;module&quot; src=&quot;./index.js&quot;&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p id="fefc440e-8d50-4817-87dd-4ed1066eb2d2" class="">The <code>&lt;script</code> line includes the JavaScript entry point, <code>index.js</code>, which contains this single line:</p><pre id="a453f01d-b9b0-4dd2-8388-2a2165a14e7a" class="code code-wrap"><code>
+import { main } from &quot;../output/Main/index.js&quot;;
+
+main();
+</code></pre><p id="0135a7d4-fcca-48c0-8cb8-894458ba40b6" class="">It calls our generated JavaScript equivalent of the <code>main</code> function of <code>module Main</code> (<code>src/main.purs</code>). Recall that <code>spago build</code> puts all generated JavaScript in the <code>output</code> directory.</p><p id="3a0522db-bf05-4f84-ba59-48b6e2ee56ea" class="">The <code>main</code> function uses the DOM and HTML APIs to render our address book component within the <code>container</code> element we defined in <code>index.html</code>:</p><pre id="1c27c207-dcf1-451d-830e-e1611d4e0f01" class="code code-wrap"><code>
+main :: Effect Unit
+main = do
+  log &quot;Rendering address book component&quot;
+  -- Get window object
+  w &lt;- window
+  -- Get window&#x27;s HTML document
+  doc &lt;- document w
+  -- Get &quot;container&quot; element in HTML
+  ctr &lt;- getElementById &quot;container&quot; $ toNonElementParentNode doc
+  case ctr of
+    Nothing -&gt; throw &quot;Container element not found.&quot;
+    Just c -&gt; do
+      -- Create AddressBook react component
+      addressBookApp &lt;- mkAddressBookApp
+      let
+        -- Create JSX node from react component. Pass-in empty props
+        app = element addressBookApp {}
+      -- Render AddressBook JSX node in DOM &quot;container&quot; element
+      D.render app c
+</code></pre><p id="d6db346f-fc18-4a09-a2f5-55952b497aef" class="">Note that these three lines:</p><pre id="18c3a3de-8bf0-429a-b6f1-bf9583167a5b" class="code code-wrap"><code>
+w &lt;- window
+doc &lt;- document w
+ctr &lt;- getElementById &quot;container&quot; $ toNonElementParentNode doc
+</code></pre><p id="341b9aac-1894-493a-a764-a6a9fc676870" class="">Can be consolidated to:</p><pre id="7ef2dff7-ff6f-4794-8600-7b76a4e78dea" class="code code-wrap"><code>
+doc &lt;- document =&lt;&lt; window
+ctr &lt;- getElementById &quot;container&quot; $ toNonElementParentNode doc
+</code></pre><p id="641e0359-f190-4a30-b198-ffe4267e873b" class="">Or consolidated even further to:</p><pre id="6416af88-996d-4c97-ae2b-7510aef3f523" class="code code-wrap"><code>
+ctr &lt;- getElementById &quot;container&quot; &lt;&lt;&lt; toNonElementParentNode =&lt;&lt; document =&lt;&lt; window
+-- or, equivalently:
+ctr &lt;- window &gt;&gt;= document &gt;&gt;= toNonElementParentNode &gt;&gt;&gt; getElementById &quot;container&quot;
+</code></pre><p id="4afa598a-68f9-4b2a-be16-150879e592d2" class="">It is a matter of personal preference whether the intermediate <code>w</code> and <code>doc</code> variables aid in readability.</p><p id="fd03f46d-a21b-4f4e-aba6-5166c1278af2" class="">Let&#x27;s dig into our AddressBook <code>reactComponent</code>. We&#x27;ll start with a simplified component, and then build up to the actual code in <code>Main.purs</code>.</p><p id="365ba529-e9cd-442e-a6a4-eb646a31b209" class="">Take a look at this minimal component. Feel free to substitute the full component with this one to see it run:</p><pre id="c02b4db3-0893-4251-aa18-e67573e8e30d" class="code code-wrap"><code>
+mkAddressBookApp :: Effect (ReactComponent {})
+mkAddressBookApp =
+  reactComponent
+    &quot;AddressBookApp&quot;
+    (\props -&gt; pure $ D.text &quot;Hi! I&#x27;m an address book&quot;)
+</code></pre><p id="2bba689a-fc4f-4048-917a-84a5204e6fa4" class=""><code>reactComponent</code> has this intimidating signature:</p><pre id="a1adc348-474c-47ff-9892-4452eb1749a2" class="code code-wrap"><code>
+reactComponent ::
+  forall hooks props.
+  Lacks &quot;children&quot; props =&gt;
+  Lacks &quot;key&quot; props =&gt;
+  Lacks &quot;ref&quot; props =&gt;
+  String -&gt;
+  ({ | props } -&gt; Render Unit hooks JSX) -&gt;
+  Effect (ReactComponent { | props })
+</code></pre><p id="cc1000ac-4e4e-4e42-b357-d7efd45d38b5" class="">The important points to note are the arguments after all the type class constraints. It takes a <code>String</code> (an arbitrary component name), a function that describes how to convert <code>props</code> into rendered <code>JSX</code>, and returns our <code>ReactComponent</code> wrapped in an <code>Effect</code>.</p><p id="8a474d9b-85bd-4ad0-9106-9bf01d897b17" class="">The props-to-JSX function is simply:</p><pre id="6a9279d2-3fd9-4937-8e38-4e848b27f734" class="code code-wrap"><code>
+\props -&gt; pure $ D.text &quot;Hi! I&#x27;m an address book&quot;
+</code></pre><p id="d1210c53-2c41-4d15-bac8-8d49a0b6a776" class=""><code>props</code> are ignored, <code>D.text</code> returns <code>JSX</code>, and <code>pure</code> lifts to rendered JSX. Now <code>component</code> has everything it needs to produce the <code>ReactComponent</code>.</p><p id="3ac5115e-3f8c-4541-a401-c5aae0670ec5" class="">Next we&#x27;ll examine some of the additional complexities of the full Address Book component.</p><p id="301ff5fc-1dd5-4857-8a7a-bfc7baf1d516" class="">These are the first few lines of our full component:</p><pre id="9b0c007a-36b4-4305-b549-a962762cf8ea" class="code code-wrap"><code>
+mkAddressBookApp :: Effect (ReactComponent {})
+mkAddressBookApp = do
+  reactComponent &quot;AddressBookApp&quot; \props -&gt; R.do
+    Tuple person setPerson &lt;- useState examplePerson
+</code></pre><p id="529a7483-b259-495c-b8ed-aab7b11ab670" class="">We track <code>person</code> as a piece of state with the <code>useState</code> hook.</p><pre id="96338d0e-5697-4eba-aa07-e17a0e4d7ee3" class="code code-wrap"><code>
+Tuple person setPerson &lt;- useState examplePerson
+</code></pre><p id="6b987d4f-26b6-482e-bc45-4ce71016dd26" class="">Note that you are free to break-up component state into multiple pieces of state with multiple calls to <code>useState</code>. For example, we could rewrite this app to use a separate piece of state for each record field of <code>Person</code>, but that happens to result in a slightly less convenient architecture in this case.</p><p id="c0ca09b6-ea66-4129-a44c-8830974ce6b2" class="">In other examples, you may encounter the <code>/\</code> infix operator for <code>Tuple</code>. This is equivalent to the above line:</p><pre id="a94296d9-0d89-4aeb-8306-add793153a0f" class="code code-wrap"><code>
+firstName /\ setFirstName &lt;- useState p.firstName
+</code></pre><p id="e25e0a01-98f9-4926-a8ac-2a56ebfa4df6" class=""><code>useState</code> takes a default initial value and returns the current value and a way to update the value. We can check the type of <code>useState</code> to gain more insight of the types <code>person</code> and <code>setPerson</code>:</p><pre id="0671a34d-ca3f-4263-9cde-5c35255259f5" class="code code-wrap"><code>
+useState ::
+  forall state.
+  state -&gt;
+  Hook (UseState state) (Tuple state ((state -&gt; state) -&gt; Effect Unit))
+</code></pre><p id="5f3c7011-8bed-43a0-8e60-65626cecc620" class="">We can strip the <code>Hook (UseState state)</code> wrapper off of the return value because <code>useState</code> is called within an <code>R.do</code> block. We&#x27;ll elaborate on <code>R.do</code> later.</p><p id="e1b41832-ae4a-434c-9111-00945dfd6b55" class="">So now we can observe the following signatures:</p><pre id="eeba9239-cd70-4d85-976b-498b4c5702ce" class="code code-wrap"><code>
+person :: state
+setPerson :: (state -&gt; state) -&gt; Effect Unit
+</code></pre><p id="ac5b9cfe-4dc2-4329-a164-9c2204b46c51" class="">The specific type of <code>state</code> is determined by our initial default value. <code>Person</code> <code>Record</code> in this case because that is the type of <code>examplePerson</code>.</p><p id="d6cf5a7d-1180-46ee-a2be-774246dd319e" class=""><code>person</code> is how we access the current state at each rerender.</p><p id="3f92801f-552d-4273-9bc8-2f796c17bc04" class=""><code>setPerson</code> is how we update the state. We simply provide a function that describes how to transform the current state to the new state. The record update syntax is perfect for this when the type of <code>state</code> happens to be a <code>Record</code>, for example:</p><pre id="3274323f-1034-4baf-99cb-bd1ddfbb5603" class="code code-wrap"><code>
+setPerson (\currentPerson -&gt; currentPerson {firstName = &quot;NewName&quot;})
+
+</code></pre><p id="0b9dba8b-349b-4282-903f-9300c567b6cd" class="">or as shorthand:</p><pre id="d36c3bdd-2780-4ebd-8c85-b94dbac49eae" class="code code-wrap"><code>
+setPerson _ {firstName = &quot;NewName&quot;}
+</code></pre><p id="f30c4a59-86e9-4990-bc6f-50b3a1a83989" class="">Non-<code>Record</code> states can also follow this update pattern. See <a href="https://github.com/megamaddu/purescript-react-basic-hooks/pull/24#issuecomment-620300541">this guide</a> for more details on best practices.</p><p id="bc44d05f-da08-411f-9565-eaa25500bb30" class="">Recall that <code>useState</code> is used within an <code>R.do</code> block. <code>R.do</code> is a special react hooks variant of <code>do</code>. The <code>R.</code> prefix &quot;qualifies&quot; this as coming from <code>React.Basic.Hooks</code>, and means we use their hooks-compatible version of <code>bind</code> in the <code>R.do</code> block. This is known as a &quot;qualified do&quot;. It lets us ignore the <code>Hook (UseState state)</code> wrapping and bind the inner <code>Tuple</code> of values to variables.</p><p id="4b36259f-b264-4a7f-afca-ee51bcba3105" class="">Another possible state management strategy is with <code>useReducer</code>, but that is outside the scope of this chapter.</p><p id="345ca440-236e-4e25-8c79-9960d02d0198" class="">Rendering <code>JSX</code> occurs here:</p><pre id="b990f9ac-f71f-4771-9cde-14e02046c10a" class="code code-wrap"><code>
+pure
+  $ D.div
+      { className: &quot;container&quot;
+      , children:
+          renderValidationErrors errors
+            &lt;&gt; [ D.div
+                  { className: &quot;row&quot;
+                  , children:
+                      [ D.form_
+                          $ [ D.h3_ [ D.text &quot;Basic Information&quot; ]
+                            , formField &quot;First Name&quot; &quot;First Name&quot; person.firstName \s -&gt;
+                                setPerson _ { firstName = s }
+                            , formField &quot;Last Name&quot; &quot;Last Name&quot; person.lastName \s -&gt;
+                                setPerson _ { lastName = s }
+                            , D.h3_ [ D.text &quot;Address&quot; ]
+                            , formField &quot;Street&quot; &quot;Street&quot; person.homeAddress.street \s -&gt;
+                                setPerson _ { homeAddress { street = s } }
+                            , formField &quot;City&quot; &quot;City&quot; person.homeAddress.city \s -&gt;
+                                setPerson _ { homeAddress { city = s } }
+                            , formField &quot;State&quot; &quot;State&quot; person.homeAddress.state \s -&gt;
+                                setPerson _ { homeAddress { state = s } }
+                            , D.h3_ [ D.text &quot;Contact Information&quot; ]
+                            ]
+                          &lt;&gt; renderPhoneNumbers
+                      ]
+                  }
+              ]
+      }
+</code></pre><p id="2223dd72-bc4d-4822-8858-5adee311bbb9" class="">Here we produce <code>JSX</code> which represents the intended state of the DOM. This JSX is typically created by applying functions corresponding to HTML tags (e.g. <code>div</code>, <code>form</code>, <code>h3</code>, <code>li</code>, <code>ul</code>, <code>label</code>, <code>input</code>) which create single HTML elements. These HTML elements are actually React components themselves, converted to JSX. There are usually three variants of each of these functions:</p><ul id="bb39543f-0c3e-43f3-9506-fbd7b877f751" class="bulleted-list"><li style="list-style-type:disc"><code>div_</code>: Accepts an array of child elements. Uses default attributes.</li></ul><ul id="7ba20c66-47eb-4b4c-92b6-1ab04f99c097" class="bulleted-list"><li style="list-style-type:disc"><code>div</code>: Accepts a <code>Record</code> of attributes. An array of child elements may be passed to the <code>children</code> field of this record.</li></ul><ul id="9c2c1c0e-284a-4451-88d4-956f1654b29f" class="bulleted-list"><li style="list-style-type:disc"><code>div&#x27;</code>: Same as <code>div</code>, but returns the <code>ReactComponent</code> before conversion to <code>JSX</code>.</li></ul><p id="874531a2-8e9d-4582-b1e8-890488e96e3c" class="">To display validation errors (if any) at the top of our form, we create a <code>renderValidationErrors</code> helper function that turns the <code>Errors</code> structure into an array of JSX. This array is prepended to the rest of our form.</p><pre id="24840b10-1e04-4875-988b-d171a9fd9b53" class="code code-wrap"><code>
+renderValidationErrors :: Errors -&gt; Array R.JSX
+renderValidationErrors [] = []
+renderValidationErrors xs =
+  let
+    renderError :: String -&gt; R.JSX
+    renderError err = D.li_ [ D.text err ]
+  in
+    [ D.div
+        { className: &quot;alert alert-danger row&quot;
+        , children: [ D.ul_ (map renderError xs) ]
+        }
+    ]
+</code></pre><p id="1a11891c-e4c1-4e46-ab42-c1ed02e6f7df" class="">Note that since we are simply manipulating regular data structures here, we can use functions like <code>map</code> to build up more interesting elements:</p><pre id="439f9b26-ec84-4a2b-a295-36d5ce671c83" class="code code-wrap"><code>
+children: [ D.ul_ (map renderError xs)]
+</code></pre><p id="7dad5f48-e3a7-4fa9-bff2-d6437cc621ac" class="">We use the <code>className</code> property to define classes for CSS styling. We&#x27;re using the <a href="https://getbootstrap.com/">Bootstrap</a> <code>stylesheet</code> for this project, which is imported in <code>index.html</code>. For example, we want items in our form arranged as <code>row</code>s, and validation errors to be emphasized with <code>alert-danger</code> styling:</p><pre id="4ca4d13f-96cb-43e3-ac40-912454ca2563" class="code code-wrap"><code>
+className: &quot;alert alert-danger row&quot;
+</code></pre><p id="8d3cd4e7-42cb-44f6-9527-e552e45393a4" class="">A second helper function is <code>formField</code>, which creates a text input for a single form field:</p><pre id="36505f2b-2d2d-41eb-9989-10f46e35c3e8" class="code code-wrap"><code>
+formField :: String -&gt; String -&gt; String -&gt; (String -&gt; Effect Unit) -&gt; R.JSX
+formField name placeholder value setValue =
+  D.label
+    { className: &quot;form-group row&quot;
+    , children:
+        [ D.div
+            { className: &quot;col-sm col-form-label&quot;
+            , children: [ D.text name ]
+            }
+        , D.div
+            { className: &quot;col-sm&quot;
+            , children:
+                [ D.input
+                    { className: &quot;form-control&quot;
+                    , placeholder
+                    , value
+                    , onChange:
+                        let
+                          handleValue :: Maybe String -&gt; Effect Unit
+                          handleValue (Just v) = setValue v
+                          handleValue Nothing  = pure unit
+                        in
+                          handler targetValue handleValue
+                    }
+                ]
+            }
+        ]
+    }
+</code></pre><p id="3116a755-cffa-41eb-8b44-7fd6da5daaae" class="">Putting the <code>input</code> and display <code>text</code> in a <code>label</code> aids in accessibility for screen readers.</p><p id="025abadd-6002-4870-8d1c-3c509c694d36" class="">The <code>onChange</code> attribute allows us to describe how to respond to user input. We use the <code>handler</code> function, which has the following type:</p><pre id="3f1b7737-8334-4888-9284-33eb4737eebb" class="code code-wrap"><code>
+handler :: forall a. EventFn SyntheticEvent a -&gt; (a -&gt; Effect Unit) -&gt; EventHandler
+</code></pre><p id="339ef856-97f5-4fc8-bd37-9e81f7fe61d8" class="">For the first argument to <code>handler</code> we use <code>targetValue</code>, which provides the value of the text within the HTML <code>input</code> element. It matches the signature expected by <code>handler</code> where the type variable <code>a</code> in this case is <code>Maybe String</code>:</p><pre id="3c8d3cdd-e13c-40ee-b973-f708eb679b53" class="code code-wrap"><code>
+targetValue :: EventFn SyntheticEvent (Maybe String)
+</code></pre><p id="a271c2b5-9c96-48eb-9dad-8e14075420f3" class="">In JavaScript, the <code>input</code> element&#x27;s <code>onChange</code> event is actually accompanied by a <code>String</code> value, but since strings in JavaScript can be null, <code>Maybe</code> is used for safety.</p><p id="f1cd61a2-b02c-4d51-bf6f-c9307bd902a1" class="">The second argument to <code>handler</code>, <code>(a -&gt; Effect Unit)</code>, must therefore have this signature:</p><pre id="820df969-7d98-420b-83d8-b116f70e126c" class="code code-wrap"><code>
+Maybe String -&gt; Effect Unit
+</code></pre><p id="686b518d-54bb-43ba-8c02-9eb3aade142e" class="">It is a function that describes how to convert this <code>Maybe String</code> value into our desired effect. We define a custom <code>handleValue</code> function for this purpose and pass it to <code>handler</code> as follows:</p><pre id="d717787b-2d69-4f63-9557-b7fd8f4eb6a8" class="code code-wrap"><code>
+onChange:
+  let
+    handleValue :: Maybe String -&gt; Effect Unit
+    handleValue (Just v) = setValue v
+    handleValue Nothing  = pure unit
+  in
+    handler targetValue handleValue
+</code></pre><p id="12c0492e-17cd-4aaf-8105-bb93a7ffb904" class=""><code>setValue</code> is the function we provided to each <code>formField</code> call that takes a string and makes the appropriate record-update call to the <code>setPerson</code> hook.</p><p id="19416ec0-7a1c-40ba-af65-e9776d595e1c" class="">Note that <code>handleValue</code> can be substituted as:</p><pre id="16866087-ac22-4436-bdbe-bd8862220079" class="code code-wrap"><code>
+onChange: handler targetValue $ traverse_ setValue
+</code></pre><p id="37582a0f-45a3-41df-bc0a-2f06dbab2b75" class="">Feel free to investigate the definition of <code>traverse_</code> to see how both forms are indeed equivalent.</p><p id="f3117478-0a73-4375-b2eb-53fb6eaacbee" class="">That covers the basics of our component implementation. However, you should read the source accompanying this chapter in order to get a full understanding of the way the component works.</p><p id="bbe854b2-7755-4453-86e0-5b4d1f9af9c3" class="">Obviously, this user interface can be improved in a number of ways. The exercises will explore some ways in which we can make the application more usable.</p></div></article></body></html>
