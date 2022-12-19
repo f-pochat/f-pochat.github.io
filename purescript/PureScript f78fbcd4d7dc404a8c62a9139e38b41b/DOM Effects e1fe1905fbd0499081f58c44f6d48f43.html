@@ -669,12 +669,12 @@ blockquote {
 </style></head><body><article id="e1fe1905-fbd0-4990-81f5-8c44f6d48f43" class="page sans"><header><img class="page-cover-image" src="https://www.notion.so/images/page-cover/met_william_morris_1878.jpg" style="object-position:center 0%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">💻</span></div><h1 class="page-title">DOM Effects</h1></header><div class="page-body"><p id="a34b97c1-2e22-4dcc-b0af-6f51dec056c9" class="">
 </p><p id="b1642930-e374-411e-a43a-2c27444f0e53" class="">There are a number of PureScript packages for working directly with the DOM, or with open-source DOM libraries. For example:</p><ul id="22e412b6-acc7-40cf-b0b4-bc9acd7a1721" class="bulleted-list"><li style="list-style-type:disc"><a href="https://github.com/purescript-web/purescript-web-dom"><code>web-dom</code></a> provides type definitions and low level interface implementations for the W3C DOM spec.</li></ul><ul id="c25e3872-bc4f-4c38-b0e8-7e9e401e3685" class="bulleted-list"><li style="list-style-type:disc"><a href="https://github.com/purescript-web/purescript-web-html"><code>web-html</code></a> provides type definitions and low level interface implementations for the W3C HTML5 spec.</li></ul><ul id="086b84e2-c015-4f17-b610-2ff253786d7f" class="bulleted-list"><li style="list-style-type:disc"><a href="https://github.com/paf31/purescript-jquery"><code>jquery</code></a> is a set of bindings to the <a href="http://jquery.org/">jQuery</a> library.</li></ul><p id="c0def2c4-2b8a-4281-b88a-a0d04bb94435" class="">There are also PureScript libraries which build abstractions on top of these libraries, such as</p><ul id="525ddf3c-455e-4ead-b473-dc905884a550" class="bulleted-list"><li style="list-style-type:disc"><a href="https://github.com/paf31/purescript-thermite"><code>thermite</code></a>, which builds on <a href="https://github.com/purescript-contrib/purescript-react"><code>react</code></a></li></ul><ul id="ec4c5583-ba99-4dc6-b69c-aa08bfe896da" class="bulleted-list"><li style="list-style-type:disc"><a href="https://github.com/megamaddu/purescript-react-basic-hooks"><code>react-basic-hooks</code></a>, which builds on <a href="https://github.com/lumihq/purescript-react-basic"><code>react-basic</code></a></li></ul><ul id="bdccb7aa-a685-418f-b4e5-ad9c6071794f" class="bulleted-list"><li style="list-style-type:disc"><a href="https://github.com/purescript-halogen/purescript-halogen"><code>halogen</code></a> which provides a type-safe set of abstractions on top of a custom virtual DOM library.</li></ul><p id="9675b863-eb0e-451b-aaec-dda5ab46eec9" class="">We will use the <code>react-basic-hooks</code> library to add a user interface to our address book application, but the interested reader is encouraged to explore alternative approaches.</p><p id="22bb7e23-f69f-49cd-9d89-4176510e5ad5" class="">
 </p><h2 id="0bcdff48-a6b7-4343-89c9-cab113d5ee62" class="">React-basic-hooks</h2><p id="70c87334-29ca-4234-8b66-5fb26ac3c2d4" class="">Using the <code>react-basic-hooks</code> library, we will define our application as a React <em>component</em>. React components describe HTML elements in code as pure data structures, which are then efficiently rendered to the DOM. In addition, components can respond to events like button clicks. The <code>react-basic-hooks</code> library uses the <code>Effect</code> monad to describe how to handle these events.</p><p id="2889711a-2690-4c64-9376-bde622865b3a" class="">
-</p><p id="c68eab7c-f98c-420b-a31b-0249a059d6e7" class="">The <code>src/index.html</code> file is minimal:</p><pre id="522e7fd9-c7ab-4b6c-8e70-784005d066bc" class="code code-wrap"><code>
+</p><p id="c68eab7c-f98c-420b-a31b-0249a059d6e7" class="">For example, the <code>index.html</code> file is minimal:</p><pre id="522e7fd9-c7ab-4b6c-8e70-784005d066bc" class="code code-wrap"><code>
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
   &lt;head&gt;
     &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;Address Book&lt;/title&gt;
+    &lt;title&gt;LengProg React&lt;/title&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css&quot; crossorigin=&quot;anonymous&quot;&gt;
   &lt;/head&gt;
   &lt;body&gt;
@@ -686,10 +686,10 @@ blockquote {
 import { main } from &quot;../output/Main/index.js&quot;;
 
 main();
-</code></pre><p id="0135a7d4-fcca-48c0-8cb8-894458ba40b6" class="">It calls our generated JavaScript equivalent of the <code>main</code> function of <code>module Main</code> (<code>src/main.purs</code>). Recall that <code>spago build</code> puts all generated JavaScript in the <code>output</code> directory.</p><p id="3a0522db-bf05-4f84-ba59-48b6e2ee56ea" class="">The <code>main</code> function uses the DOM and HTML APIs to render our address book component within the <code>container</code> element we defined in <code>index.html</code>:</p><pre id="1c27c207-dcf1-451d-830e-e1611d4e0f01" class="code code-wrap"><code>
+</code></pre><p id="0135a7d4-fcca-48c0-8cb8-894458ba40b6" class="">It calls our generated JavaScript equivalent of the <code>main</code> function of <code>module Main</code> (<code>main.purs</code>). The script <code>spago build</code> puts all generated JavaScript in the <code>output</code> directory.</p><p id="3a0522db-bf05-4f84-ba59-48b6e2ee56ea" class="">The <code>main</code> function uses the DOM and HTML APIs to render the screen component within the <code>container</code> element we defined in <code>index.html</code>:</p><pre id="1c27c207-dcf1-451d-830e-e1611d4e0f01" class="code code-wrap"><code>
 main :: Effect Unit
 main = do
-  log &quot;Rendering address book component&quot;
+  log &quot;Rendering React component&quot;
   -- Get window object
   w &lt;- window
   -- Get window&#x27;s HTML document
@@ -699,12 +699,12 @@ main = do
   case ctr of
     Nothing -&gt; throw &quot;Container element not found.&quot;
     Just c -&gt; do
-      -- Create AddressBook react component
+      -- Create react component
       addressBookApp &lt;- mkAddressBookApp
       let
         -- Create JSX node from react component. Pass-in empty props
         app = element addressBookApp {}
-      -- Render AddressBook JSX node in DOM &quot;container&quot; element
+      -- Render JSX node in DOM &quot;container&quot; element
       D.render app c
 </code></pre><p id="d6db346f-fc18-4a09-a2f5-55952b497aef" class="">Note that these three lines:</p><pre id="18c3a3de-8bf0-429a-b6f1-bf9583167a5b" class="code code-wrap"><code>
 w &lt;- window
@@ -717,12 +717,12 @@ ctr &lt;- getElementById &quot;container&quot; $ toNonElementParentNode doc
 ctr &lt;- getElementById &quot;container&quot; &lt;&lt;&lt; toNonElementParentNode =&lt;&lt; document =&lt;&lt; window
 -- or, equivalently:
 ctr &lt;- window &gt;&gt;= document &gt;&gt;= toNonElementParentNode &gt;&gt;&gt; getElementById &quot;container&quot;
-</code></pre><p id="4afa598a-68f9-4b2a-be16-150879e592d2" class="">It is a matter of personal preference whether the intermediate <code>w</code> and <code>doc</code> variables aid in readability.</p><p id="fd03f46d-a21b-4f4e-aba6-5166c1278af2" class="">Let&#x27;s dig into our AddressBook <code>reactComponent</code>. We&#x27;ll start with a simplified component, and then build up to the actual code in <code>Main.purs</code>.</p><p id="365ba529-e9cd-442e-a6a4-eb646a31b209" class="">Take a look at this minimal component. Feel free to substitute the full component with this one to see it run:</p><pre id="c02b4db3-0893-4251-aa18-e67573e8e30d" class="code code-wrap"><code>
-mkAddressBookApp :: Effect (ReactComponent {})
-mkAddressBookApp =
+</code></pre><p id="4afa598a-68f9-4b2a-be16-150879e592d2" class="">It is a matter of personal preference whether the intermediate <code>w</code> and <code>doc</code> variables aid in readability.</p><p id="365ba529-e9cd-442e-a6a4-eb646a31b209" class="">Take a look at this minimal component. Feel free to substitute the full component with this one to see it run:</p><pre id="c02b4db3-0893-4251-aa18-e67573e8e30d" class="code code-wrap"><code>
+mkReactComponent :: Effect (ReactComponent {})
+mkReactComponent =
   reactComponent
-    &quot;AddressBookApp&quot;
-    (\props -&gt; pure $ D.text &quot;Hi! I&#x27;m an address book&quot;)
+    &quot;React Component&quot;
+    (\props -&gt; pure $ D.text &quot;Hi! I&#x27;m a react component&quot;)
 </code></pre><p id="2bba689a-fc4f-4048-917a-84a5204e6fa4" class=""><code>reactComponent</code> has this intimidating signature:</p><pre id="a1adc348-474c-47ff-9892-4452eb1749a2" class="code code-wrap"><code>
 reactComponent ::
   forall hooks props.
@@ -733,30 +733,26 @@ reactComponent ::
   ({ | props } -&gt; Render Unit hooks JSX) -&gt;
   Effect (ReactComponent { | props })
 </code></pre><p id="cc1000ac-4e4e-4e42-b357-d7efd45d38b5" class="">The important points to note are the arguments after all the type class constraints. It takes a <code>String</code> (an arbitrary component name), a function that describes how to convert <code>props</code> into rendered <code>JSX</code>, and returns our <code>ReactComponent</code> wrapped in an <code>Effect</code>.</p><p id="8a474d9b-85bd-4ad0-9106-9bf01d897b17" class="">The props-to-JSX function is simply:</p><pre id="6a9279d2-3fd9-4937-8e38-4e848b27f734" class="code code-wrap"><code>
-\props -&gt; pure $ D.text &quot;Hi! I&#x27;m an address book&quot;
-</code></pre><p id="d1210c53-2c41-4d15-bac8-8d49a0b6a776" class=""><code>props</code> are ignored, <code>D.text</code> returns <code>JSX</code>, and <code>pure</code> lifts to rendered JSX. Now <code>component</code> has everything it needs to produce the <code>ReactComponent</code>.</p><p id="3ac5115e-3f8c-4541-a401-c5aae0670ec5" class="">Next we&#x27;ll examine some of the additional complexities of the full Address Book component.</p><p id="301ff5fc-1dd5-4857-8a7a-bfc7baf1d516" class="">These are the first few lines of our full component:</p><pre id="9b0c007a-36b4-4305-b549-a962762cf8ea" class="code code-wrap"><code>
-mkAddressBookApp :: Effect (ReactComponent {})
-mkAddressBookApp = do
-  reactComponent &quot;AddressBookApp&quot; \props -&gt; R.do
-    Tuple person setPerson &lt;- useState examplePerson
-</code></pre><p id="529a7483-b259-495c-b8ed-aab7b11ab670" class="">We track <code>person</code> as a piece of state with the <code>useState</code> hook.</p><pre id="96338d0e-5697-4eba-aa07-e17a0e4d7ee3" class="code code-wrap"><code>
-Tuple person setPerson &lt;- useState examplePerson
-</code></pre><p id="6b987d4f-26b6-482e-bc45-4ce71016dd26" class="">Note that you are free to break-up component state into multiple pieces of state with multiple calls to <code>useState</code>. For example, we could rewrite this app to use a separate piece of state for each record field of <code>Person</code>, but that happens to result in a slightly less convenient architecture in this case.</p><p id="c0ca09b6-ea66-4129-a44c-8830974ce6b2" class="">In other examples, you may encounter the <code>/\</code> infix operator for <code>Tuple</code>. This is equivalent to the above line:</p><pre id="a94296d9-0d89-4aeb-8306-add793153a0f" class="code code-wrap"><code>
-firstName /\ setFirstName &lt;- useState p.firstName
-</code></pre><p id="e25e0a01-98f9-4926-a8ac-2a56ebfa4df6" class=""><code>useState</code> takes a default initial value and returns the current value and a way to update the value. We can check the type of <code>useState</code> to gain more insight of the types <code>person</code> and <code>setPerson</code>:</p><pre id="0671a34d-ca3f-4263-9cde-5c35255259f5" class="code code-wrap"><code>
+\props -&gt; pure $ D.text &quot;Hi! I&#x27;m a React component&quot;
+</code></pre><p id="d1210c53-2c41-4d15-bac8-8d49a0b6a776" class=""><code>props</code> are ignored, <code>D.text</code> returns <code>JSX</code>, and <code>pure</code> lifts to rendered JSX. Now <code>component</code> has everything it needs to produce the <code>ReactComponent</code>.</p><p id="301ff5fc-1dd5-4857-8a7a-bfc7baf1d516" class="">These are the first few lines of our full component:</p><pre id="9b0c007a-36b4-4305-b549-a962762cf8ea" class="code code-wrap"><code>
+mkReactComponent :: Effect (ReactComponent {})
+mkReactComponent = do
+  reactComponent &quot;React Component App&quot; \props -&gt; R.do
+    Tuple counter setCount &lt;- useState 0
+</code></pre><p id="529a7483-b259-495c-b8ed-aab7b11ab670" class="">We track the counter as a piece of state with the <code>useState</code> hook.</p><pre id="96338d0e-5697-4eba-aa07-e17a0e4d7ee3" class="code code-wrap"><code>
+Tuple counter setCount &lt;- useState 0
+</code></pre><p id="6b987d4f-26b6-482e-bc45-4ce71016dd26" class="">Note that you are free to break-up component state into multiple pieces of state with multiple calls to <code>useState</code>. </p><p id="c0ca09b6-ea66-4129-a44c-8830974ce6b2" class="">In other examples, you may encounter the <code>/\</code> infix operator for <code>Tuple</code>. This is equivalent to the above line:</p><pre id="a94296d9-0d89-4aeb-8306-add793153a0f" class="code code-wrap"><code>
+counter /\ setCount &lt;- useState 0
+</code></pre><p id="e25e0a01-98f9-4926-a8ac-2a56ebfa4df6" class=""><code>useState</code> takes a default initial value and returns the current value and a way to update the value. We can check the type of <code>useState</code> to gain more insight of the types <code>counter</code> and <code>setCount</code>:</p><pre id="0671a34d-ca3f-4263-9cde-5c35255259f5" class="code code-wrap"><code>
 useState ::
   forall state.
   state -&gt;
   Hook (UseState state) (Tuple state ((state -&gt; state) -&gt; Effect Unit))
 </code></pre><p id="5f3c7011-8bed-43a0-8e60-65626cecc620" class="">We can strip the <code>Hook (UseState state)</code> wrapper off of the return value because <code>useState</code> is called within an <code>R.do</code> block. We&#x27;ll elaborate on <code>R.do</code> later.</p><p id="e1b41832-ae4a-434c-9111-00945dfd6b55" class="">So now we can observe the following signatures:</p><pre id="eeba9239-cd70-4d85-976b-498b4c5702ce" class="code code-wrap"><code>
-person :: state
-setPerson :: (state -&gt; state) -&gt; Effect Unit
-</code></pre><p id="ac5b9cfe-4dc2-4329-a164-9c2204b46c51" class="">The specific type of <code>state</code> is determined by our initial default value. <code>Person</code> <code>Record</code> in this case because that is the type of <code>examplePerson</code>.</p><p id="d6cf5a7d-1180-46ee-a2be-774246dd319e" class=""><code>person</code> is how we access the current state at each rerender.</p><p id="3f92801f-552d-4273-9bc8-2f796c17bc04" class=""><code>setPerson</code> is how we update the state. We simply provide a function that describes how to transform the current state to the new state. The record update syntax is perfect for this when the type of <code>state</code> happens to be a <code>Record</code>, for example:</p><pre id="3274323f-1034-4baf-99cb-bd1ddfbb5603" class="code code-wrap"><code>
-setPerson (\currentPerson -&gt; currentPerson {firstName = &quot;NewName&quot;})
-
-</code></pre><p id="0b9dba8b-349b-4282-903f-9300c567b6cd" class="">or as shorthand:</p><pre id="d36c3bdd-2780-4ebd-8c85-b94dbac49eae" class="code code-wrap"><code>
-setPerson _ {firstName = &quot;NewName&quot;}
-</code></pre><p id="f30c4a59-86e9-4990-bc6f-50b3a1a83989" class="">Non-<code>Record</code> states can also follow this update pattern. See <a href="https://github.com/megamaddu/purescript-react-basic-hooks/pull/24#issuecomment-620300541">this guide</a> for more details on best practices.</p><p id="bc44d05f-da08-411f-9565-eaa25500bb30" class="">Recall that <code>useState</code> is used within an <code>R.do</code> block. <code>R.do</code> is a special react hooks variant of <code>do</code>. The <code>R.</code> prefix &quot;qualifies&quot; this as coming from <code>React.Basic.Hooks</code>, and means we use their hooks-compatible version of <code>bind</code> in the <code>R.do</code> block. This is known as a &quot;qualified do&quot;. It lets us ignore the <code>Hook (UseState state)</code> wrapping and bind the inner <code>Tuple</code> of values to variables.</p><p id="4b36259f-b264-4a7f-afca-ee51bcba3105" class="">Another possible state management strategy is with <code>useReducer</code>, but that is outside the scope of this chapter.</p><p id="345ca440-236e-4e25-8c79-9960d02d0198" class="">Rendering <code>JSX</code> occurs here:</p><pre id="b990f9ac-f71f-4771-9cde-14e02046c10a" class="code code-wrap"><code>
+counter :: state
+setCounter :: (state -&gt; state) -&gt; Effect Unit
+</code></pre><p id="ac5b9cfe-4dc2-4329-a164-9c2204b46c51" class=""><code>counter</code> is how we access the current state at each re-render.</p><p id="3f92801f-552d-4273-9bc8-2f796c17bc04" class=""><code>setCounter</code> is how we update the state. We simply provide a function that describes how to transform the current state to the new state. </p><p id="f30c4a59-86e9-4990-bc6f-50b3a1a83989" class="">
+</p><p id="bc44d05f-da08-411f-9565-eaa25500bb30" class="">Recall that <code>useState</code> is used within an <code>R.do</code> block. <code>R.do</code> is a special react hooks variant of <code>do</code>. The <code>R.</code> prefix &quot;qualifies&quot; this as coming from <code>React.Basic.Hooks</code>, and means we use their hooks-compatible version of <code>bind</code> in the <code>R.do</code> block. This is known as a &quot;qualified do&quot;. It lets us ignore the <code>Hook (UseState state)</code> wrapping and bind the inner <code>Tuple</code> of values to variables.</p><p id="4b36259f-b264-4a7f-afca-ee51bcba3105" class="">Another possible state management strategy is with <code>useReducer</code>, but that is outside the scope of this chapter.</p><p id="345ca440-236e-4e25-8c79-9960d02d0198" class="">Rendering <code>JSX</code> occurs for example in an example like this:</p><pre id="b990f9ac-f71f-4771-9cde-14e02046c10a" class="code code-wrap"><code>
 pure
   $ D.div
       { className: &quot;container&quot;
@@ -847,4 +843,4 @@ onChange:
     handler targetValue handleValue
 </code></pre><p id="12c0492e-17cd-4aaf-8105-bb93a7ffb904" class=""><code>setValue</code> is the function we provided to each <code>formField</code> call that takes a string and makes the appropriate record-update call to the <code>setPerson</code> hook.</p><p id="19416ec0-7a1c-40ba-af65-e9776d595e1c" class="">Note that <code>handleValue</code> can be substituted as:</p><pre id="16866087-ac22-4436-bdbe-bd8862220079" class="code code-wrap"><code>
 onChange: handler targetValue $ traverse_ setValue
-</code></pre><p id="37582a0f-45a3-41df-bc0a-2f06dbab2b75" class="">Feel free to investigate the definition of <code>traverse_</code> to see how both forms are indeed equivalent.</p><p id="f3117478-0a73-4375-b2eb-53fb6eaacbee" class="">That covers the basics of our component implementation. However, you should read the source accompanying this chapter in order to get a full understanding of the way the component works.</p><p id="bbe854b2-7755-4453-86e0-5b4d1f9af9c3" class="">Obviously, this user interface can be improved in a number of ways. The exercises will explore some ways in which we can make the application more usable.</p></div></article></body></html>
+</code></pre><p id="37582a0f-45a3-41df-bc0a-2f06dbab2b75" class="">Feel free to investigate the definition of <code>traverse_</code> to see how both forms are indeed equivalent.</p></div></article></body></html>

@@ -692,8 +692,7 @@ showPerson { first: x, last: y } = y &lt;&gt; &quot;, &quot; &lt;&gt; x</code></
 &gt; showPerson {first: &quot;Morgan&quot;, last: &quot;Freeman&quot;}
 &quot;Freeman, Morgan&quot;</code></pre><p id="90c9aca1-b279-480d-924e-5271f81c1be1" class="">
 </p><h2 id="85641304-e813-4d92-8193-85563eb433bf" class="">Named patterns</h2><p id="5988cf3f-b054-40c6-9c4a-ba0daa5e503b" class="">
-</p><p id="ede790d3-af63-419d-af49-2acfc852bd3b" class="">Patterns can be <em>named</em>
- to bring additional names into scope when using nested patterns. Any pattern can be named by using the <code>@</code> symbol</p><pre id="21ce9505-8123-4477-a6fa-e3f8c0aee979" class="code"><code>sortPair :: Array Int -&gt; Array Int
+</p><p id="ede790d3-af63-419d-af49-2acfc852bd3b" class="">Patterns can be <em>named</em> to bring additional names into scope when using nested patterns. Any pattern can be named by using the <code>@</code> symbol</p><pre id="21ce9505-8123-4477-a6fa-e3f8c0aee979" class="code"><code>sortPair :: Array Int -&gt; Array Int
 sortPair arr@[x, y]
   | x &lt;= y = arr
   | otherwise = [y, x]
